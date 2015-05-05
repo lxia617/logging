@@ -1,0 +1,16 @@
+package p;
+
+import "bi.proto";
+
+
+message DeepshareBiLog {
+    optional string os = 1;
+    optional string osVersion = 2;
+    optional string deviceId = 3;
+    optional string ip = 4;
+    optional string param = 5;
+}
+
+extend BiLog {
+    optional DeepshareBiLog deepshareLog = 101;
+}
