@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	misbi.InitDbConn()
 	go func() {
 		log.Println("start http server")
 		http.HandleFunc("/bi", misbi.BiFunc)

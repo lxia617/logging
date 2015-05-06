@@ -19,6 +19,7 @@ func newServer() *misBiServer {
 
 func (s *misBiServer) Bi(ctx context.Context, biLog *p.BiLog) (*p.BiResult, error) {
 	log.Println("[grpc] server api Bi() called")
+	SaveBiLog(biLog)
 	return &p.BiResult{false, "detaildetail"}, nil
 }
 
