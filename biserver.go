@@ -6,7 +6,7 @@ import (
 	"html"
 	"io/ioutil"
 	"log"
-	p "misbi/proto"
+	"misbi/p"
 	"net/http"
 	"strconv"
 )

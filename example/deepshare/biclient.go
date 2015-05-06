@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"misbi/bi"
-	p "misbi/proto"
+	"misbi/p"
 	"time"
 )
 

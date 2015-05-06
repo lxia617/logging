@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"gopkg.in/mgo.v2"
 	"log"
-	p "misbi/proto"
+	"misbi/p"
 	"time"
 )
 

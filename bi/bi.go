@@ -4,7 +4,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
-	p "misbi/proto"
+	"misbi/p"
 )
 
 var (

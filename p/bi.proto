@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package proto;
+package p;
 
 service MisBi {
     rpc Bi(BiLog) returns (BiResult) {}
