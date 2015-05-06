@@ -5,7 +5,6 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	p "misbi/proto"
-	"time"
 )
 
 var (
@@ -26,13 +25,8 @@ func Init(host string, port string) {
 
 // Bi
 // add a bi log
-func Bi() {
-	rslt, err := grpcClient.Bi(context.Background(), &p.BiLog{
-		ProjectName: "deepshare",
-		ActionName:  "userlink",
-		Timestamp:   time.Now().Unix(),
-		Detail:      []byte("detaildetail")},
-	)
+func Bi(item *p.BiLog) {
+	rslt, err := grpcClient.Bi(context.Background(), item)
 	if err != nil {
 		log.Println("error when calling Bi:", err)
 	}

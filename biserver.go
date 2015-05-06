@@ -6,20 +6,13 @@ import (
 	"html"
 	"io/ioutil"
 	"log"
-	"misbi/p"
+	p "misbi/proto"
 	"net/http"
 	"strconv"
 )
 
-type BILog struct {
-	ProjectName string
-	ActionName  string
-	Timestamp   int64
-	Data        []byte
-}
-
 var (
-	projBiLogs map[string][]*BILog = make(map[string][]*BILog)
+	projBiLogs map[string][]*p.BiLog = make(map[string][]*p.BiLog)
 )
 
 func BiFunc(w http.ResponseWriter, req *http.Request) {
@@ -36,8 +29,6 @@ func BiFunc(w http.ResponseWriter, req *http.Request) {
 	}
 	log.Println(pbBiLog.String())
 
-	log.Println(pbBiLog.ExtensionMap())
-
 	//Save the log by projectName
 	appendBiLog(pbBiLog)
 
@@ -53,21 +44,12 @@ func GetBiLogsFunc(w http.ResponseWriter, req *http.Request) {
 }
 
 func appendBiLog(pbBiLog *p.BiLog) {
-	b, err := proto.Marshal(pbBiLog)
-	if err != nil {
-		panic(err)
-	}
-	pojName := pbBiLog.GetProjectName()
-	biLog := &BILog{
-		ProjectName: pojName,
-		ActionName:  pbBiLog.GetActionName(),
-		Timestamp:   pbBiLog.GetTimestamp(),
-		Data:        b,
-	}
+	pojName := pbBiLog.ProjectName
+
 	if biLogs, ok := projBiLogs[pojName]; !ok {
-		projBiLogs[pojName] = []*BILog{biLog}
+		projBiLogs[pojName] = []*p.BiLog{pbBiLog}
 	} else {
-		biLogs = append(biLogs, biLog)
+		biLogs = append(biLogs, pbBiLog)
 	}
 	log.Println("Project bi logs:", projBiLogs)
 }
@@ -80,7 +62,7 @@ func GetBiLogsForProj(projName string) (ret [][]byte) {
 	} else {
 		for i, bilog := range bilogs {
 			log.Printf("	[%d] %#v\n", i, bilog)
-			ret = append(ret, bilog.Data)
+			ret = append(ret, []byte(bilog.String()))
 		}
 	}
 	return
