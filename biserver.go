@@ -62,7 +62,11 @@ func GetBiLogsForProj(projName string) (ret [][]byte) {
 	} else {
 		for i, bilog := range bilogs {
 			log.Printf("	[%d] %#v\n", i, bilog)
-			ret = append(ret, []byte(bilog.String()))
+			b, err := proto.Marshal(bilog)
+			if err != nil {
+				log.Panicf("failed to marshal:", err)
+			}
+			ret = append(ret, b)
 		}
 	}
 	return
