@@ -2,16 +2,16 @@ package main
 
 import (
 	"log"
-	"misbi/bi"
-	"misbi/p"
+	"github.com/MiSingularity/logging/fe"
+	"github.com/MiSingularity/logging/p"
 	"time"
 )
 
 func main() {
 	log.Println("init bi client")
-	bi.Init("127.0.0.1", "8999")
+	fe.Init("127.0.0.1", "8999")
 	log.Println("add a bi log")
-	bi.Bi(&p.BiLog{
+	fe.Bi(&p.BiLog{
 		ProjectName: "deepshare",
 		ActionName:  "userlink",
 		Timestamp:   time.Now().Unix(),

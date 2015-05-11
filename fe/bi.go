@@ -1,10 +1,10 @@
-package bi
+package fe
 
 import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
-	"misbi/p"
+	"github.com/MiSingularity/logging/p"
 )
 
 var (
@@ -18,6 +18,7 @@ func Init(host string, port string) {
 	if err != nil {
 		log.Fatal("fail to dial:", err)
 	}
+	//TODO should close conn
 	//	defer conn.Close()
 	grpcClient = p.NewMisBiClient(conn)
 

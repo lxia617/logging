@@ -1,11 +1,11 @@
-package misbi
+package be
 
 import (
 	"errors"
 	"fmt"
 	"gopkg.in/mgo.v2"
 	"log"
-	"misbi/p"
+	"github.com/MiSingularity/logging/p"
 	"time"
 )
 

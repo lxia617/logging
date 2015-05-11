@@ -1,4 +1,4 @@
-package misbi
+package be
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"html"
 	"io/ioutil"
 	"log"
-	"misbi/p"
+	"github.com/MiSingularity/logging/p"
 	"net/http"
 )
 

@@ -2,19 +2,19 @@ package main
 
 import (
 	"log"
-	"misbi"
+	"github.com/MiSingularity/logging/be"
 	"net/http"
 )
 
 func main() {
-	misbi.InitDbConn()
+	be.InitDbConn()
 	go func() {
 		log.Println("start http server")
-		http.HandleFunc("/bi", misbi.BiFunc)
+		http.HandleFunc("/bi", be.BiFunc)
 		if err := http.ListenAndServe(":8088", nil); err != nil {
 			log.Fatal(err)
 		}
 	}()
 
-	misbi.InitGrpcServer()
+	be.InitGrpcServer()
 }

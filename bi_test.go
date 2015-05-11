@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"github.com/golang/protobuf/proto"
 	"log"
-	"misbi/p"
+	"github.com/MiSingularity/logging/p"
 	"net/http"
 	"testing"
 	"time"

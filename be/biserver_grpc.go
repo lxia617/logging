@@ -1,10 +1,10 @@
-package misbi
+package be
 
 import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
-	"misbi/p"
+	"github.com/MiSingularity/logging/p"
 	"net"
 )
 
