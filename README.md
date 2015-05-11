@@ -1,12 +1,12 @@
 Logging service for golang projects
 ------------------------------
 
-back-end usage
---------------
+usage with grpc
+---------------
 
-1. get misbi code and put it to your GOPATH:  GOPATH/src/misbi
+1. go get github.com/MiSingularity/logging
    
-2. Init grpc connection by calling
+2. Init grpc client by calling
     ```go
     bi.Init("127.0.0.1", "8999")
     ```
@@ -21,10 +21,6 @@ back-end usage
    		Detail:      []byte("detail~~~~~~"),
    	})
    	```
-front-end usage
----------------
-1. get bi server address from devops, ie. http://127.0.0.1:8088
-2. post to http://127.0.0.1:8088?action=projectname/actionname
-    put bi log in http body
 
-you can refer to bi_test.go
+Golang example is placed in /example/go/biclient.go,
+Other languages are similar.

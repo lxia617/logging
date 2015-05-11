@@ -1,10 +1,10 @@
 package be
 
 import (
+	"github.com/MiSingularity/logging/p"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
-	"github.com/MiSingularity/logging/p"
 	"net"
 )
 
@@ -23,8 +23,8 @@ func (s *misBiServer) Bi(ctx context.Context, biLog *p.BiLog) (*p.BiResult, erro
 	return &p.BiResult{false, "detaildetail"}, nil
 }
 
-func InitGrpcServer() {
-	lis, err := net.Listen("tcp", ":8999")
+func InitGrpcServer(port string) {
+	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Fatal("failed to listen: ", err)
 	}

@@ -1,20 +1,14 @@
 package main
 
 import (
-	"log"
 	"github.com/MiSingularity/logging/be"
-	"net/http"
+)
+
+const (
+	BI_SERVER_PORT = "8099"
 )
 
 func main() {
 	be.InitDbConn()
-	go func() {
-		log.Println("start http server")
-		http.HandleFunc("/bi", be.BiFunc)
-		if err := http.ListenAndServe(":8088", nil); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	be.InitGrpcServer()
+	be.InitGrpcServer(BI_SERVER_PORT)
 }
