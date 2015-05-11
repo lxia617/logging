@@ -19,8 +19,10 @@ func newServer() *misBiServer {
 
 func (s *misBiServer) Bi(ctx context.Context, biLog *p.BiLog) (*p.BiResult, error) {
 	log.Println("[grpc] server api Bi() called")
-	SaveBiLog(biLog)
-	return &p.BiResult{false, "detaildetail"}, nil
+	if err := SaveBiLog(biLog); err != nil {
+		return &p.BiResult{false, err.Error()}, err
+	}
+	return &p.BiResult{true, ""}, nil
 }
 
 func InitGrpcServer(port string) {
@@ -28,7 +30,7 @@ func InitGrpcServer(port string) {
 	if err != nil {
 		log.Fatal("failed to listen: ", err)
 	}
-	log.Println("grpc server start")
+	log.Println("grpc server started. listening on port", port)
 	grpcServer := grpc.NewServer()
 	p.RegisterMisBiServer(grpcServer, newServer())
 	if err := grpcServer.Serve(lis); err != nil {

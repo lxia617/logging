@@ -22,5 +22,5 @@ usage with grpc
    	})
    	```
 
-Golang example is placed in /example/go/biclient.go,
+Golang example is placed in fe/example/go/biclient.go,
 Other languages are similar.
