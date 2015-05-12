@@ -41,7 +41,6 @@ func SaveBiLog(item *p.BiLog) error {
 	}
 	db := MgoSession.DB(item.ProjectName)
 	collection := db.C("userlog")
-	item.Timestamp = time.Now().Unix()
 	if err := collection.Insert(item); err != nil {
 		log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 		return err
