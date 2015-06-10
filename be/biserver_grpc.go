@@ -18,7 +18,7 @@ func newServer() *misBiServer {
 }
 
 func (s *misBiServer) Bi(ctx context.Context, biLog *p.BiLog) (*p.BiResult, error) {
-	log.Println("[grpc] server api Bi() called")
+	log.Println("[grpc] server api Bi() called", biLog.ProjectName, biLog.ActionName, biLog.Timestamp, biLog.Detail)
 	if err := SaveBiLog(biLog); err != nil {
 		return &p.BiResult{false, err.Error()}, err
 	}

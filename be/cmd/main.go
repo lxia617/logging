@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	BI_SERVER_PORT = "8999"
+	BI_SERVER_PORT = "50051"
 )
 
 func main() {
