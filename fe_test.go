@@ -10,7 +10,7 @@ import (
 )
 
 func setup() {
-	fe.Init("127.0.0.1", "8999")
+	fe.Init("127.0.0.1", "50051")
 }
 
 func teardown() {
