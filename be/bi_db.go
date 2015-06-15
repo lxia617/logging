@@ -3,7 +3,7 @@ package be
 import (
 	"errors"
 	"fmt"
-	"github.com/MiSingularity/logging/p"
+	"github.com/MISingularity/logging/p"
 	"gopkg.in/mgo.v2"
 	"log"
 	"time"

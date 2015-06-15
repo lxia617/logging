@@ -1,9 +1,9 @@
 package logging
 
 import (
-	"github.com/MiSingularity/logging/be/internal"
-	"github.com/MiSingularity/logging/fe"
-	"github.com/MiSingularity/logging/p"
+	"github.com/MISingularity/logging/be/internal"
+	"github.com/MISingularity/logging/fe"
+	"github.com/MISingularity/logging/p"
 	"log"
 	"os"
 	"testing"

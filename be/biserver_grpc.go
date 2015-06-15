@@ -2,7 +2,7 @@ package be
 
 import (
 	"fmt"
-	"github.com/MiSingularity/logging/p"
+	"github.com/MISingularity/logging/p"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"

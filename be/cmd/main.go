@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/MiSingularity/logging/be"
+	"github.com/MISingularity/logging/be"
 	"log"
 	"os"
 )

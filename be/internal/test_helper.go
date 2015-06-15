@@ -2,8 +2,8 @@ package internal
 
 import (
 	"bytes"
-	"github.com/MiSingularity/logging/be"
-	"github.com/MiSingularity/logging/p"
+	"github.com/MISingularity/logging/be"
+	"github.com/MISingularity/logging/p"
 	"gopkg.in/mgo.v2/bson"
 	"log"
 )

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/MISingularity/logging/fe"
+	"github.com/MISingularity/logging/p"
 	"log"
-	"github.com/MiSingularity/logging/fe"
-	"github.com/MiSingularity/logging/p"
 	"time"
 )
 
