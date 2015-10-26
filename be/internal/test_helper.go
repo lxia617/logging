@@ -43,7 +43,7 @@ func RetrieveBiLog(item *p.BiLog) *p.BiLog {
 
 func DeleteBiLog(item *p.BiLog) {
 	if be.MgoSession == nil {
-		be.InitDbConn()
+		be.InitDbConn("127.0.0.1", "27017")
 	}
 	db := be.MgoSession.DB(item.ProjectName)
 	collection := db.C("userlog")
