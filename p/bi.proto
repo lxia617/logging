@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package p;
+
+option java_multiple_files = true;
+option java_package = "com.singularpoints.io.grpc";
+option java_outer_classname = "BiProto";
+
+service MisBi {
+    rpc Bi(BiLog) returns (BiResult) {}
+}
+
+message BiLog {
+    string projectName = 1;
+    string actionName = 2;
+    int64 timestamp = 3;
+    bytes detail = 4;
+}
+
+message BiResult {
+    bool result = 1;
+    string msg = 2;
+}
+
