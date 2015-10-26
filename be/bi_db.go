@@ -10,8 +10,6 @@ import (
 )
 
 const (
-	MONGO_HOST     = "127.0.0.1"
-	MONGO_PORT     = "27017"
 	MONGO_USER     = ""
 	MONGO_PASSWORD = ""
 	MONGO_DBNAME   = "userlog"
@@ -19,16 +17,15 @@ const (
 
 var MgoSession *mgo.Session
 
-func InitDbConn() error {
-	if MgoSession == nil {
-		url := fmt.Sprintf("mongodb://%s:%s/%s", MONGO_HOST, MONGO_PORT, MONGO_DBNAME)
-		session, err := mgo.DialWithTimeout(url, time.Duration(10)*time.Second)
-		if err != nil {
-			log.Println("[ERROR]Can not connect MongoDB, err:", err)
-			return errors.New("Can not connect mongodb")
-		}
-		MgoSession = session
+func InitDbConn(mongoHost, mongoPort string) error {
+	url := fmt.Sprintf("mongodb://%s:%s/%s", mongoHost, mongoPort, MONGO_DBNAME)
+	log.Println("Try to connect to MongoDB, url: ", url, "...")
+	session, err := mgo.DialWithTimeout(url, time.Duration(10)*time.Second)
+	if err != nil {
+		log.Println("[ERROR]Can not connect MongoDB, err:", err)
+		return errors.New("Can not connect mongodb")
 	}
+	MgoSession = session
 	log.Println("Init mongo session succeed")
 	return nil
 }

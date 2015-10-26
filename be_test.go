@@ -8,7 +8,7 @@ import (
 )
 
 func TestSaveBiLog(t *testing.T) {
-	be.InitDbConn()
+	be.InitDbConn("127.0.0.1", "27017")
 	pbBiLog := &p.BiLog{
 		ProjectName: "testprojectXXX",
 		ActionName:  "testactionXXX",
