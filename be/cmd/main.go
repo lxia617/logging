@@ -20,7 +20,10 @@ func main() {
 	if err := fs.Parse(os.Args[1:]); err != nil {
 		log.Fatal(err)
 	}
-	logfile, err := os.OpenFile("logging_"+time.Now().Format("20060102_150405.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if fi, err := os.Stat("log"); os.IsNotExist(err) || !fi.IsDir() {
+		os.Mkdir("log", 0755)
+	}
+	logfile, err := os.OpenFile("log/logging_"+time.Now().Format("20060102_150405.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Println("Error: ", err)
 	}
