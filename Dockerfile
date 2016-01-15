@@ -1,4 +1,4 @@
-FROM golang
+FROM r.fds.so:5000/golang1.5.3
 
 ADD . /go/src/github.com/MISingularity/logging
 WORKDIR /go/src/github.com/MISingularity/logging
