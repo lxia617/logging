@@ -8,7 +8,7 @@ usage with grpc
    
 2. Init grpc client by calling
     ```go
-    bi.Init("127.0.0.1", "8999")
+    bi.Init("127.0.0.1", "50051")
     ```
     
 3. Call Bi() to add a bi log, for example:

@@ -2,11 +2,10 @@ package main
 
 import (
 	"flag"
-	"github.com/MISingularity/logging/be"
-	"io"
 	"log"
 	"os"
-	"time"
+
+	"github.com/MISingularity/logging/be"
 )
 
 const (
@@ -23,12 +22,7 @@ func main() {
 	if fi, err := os.Stat("log"); os.IsNotExist(err) || !fi.IsDir() {
 		os.Mkdir("log", 0755)
 	}
-	logfile, err := os.OpenFile("log/logging_"+time.Now().Format("20060102_150405.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Println("Error: ", err)
-	}
-	log.SetOutput(io.MultiWriter(logfile, os.Stdout))
-	defer logfile.Close()
+
 	if err := be.InitDbConn(*mh, *mp); err != nil {
 		log.Fatal(err)
 	}
