@@ -2,11 +2,12 @@ package be
 
 import (
 	"fmt"
+	"log"
+	"net"
+
 	"github.com/MISingularity/logging/p"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"log"
-	"net"
 )
 
 type misBiServer struct {
@@ -19,7 +20,7 @@ func newServer() *misBiServer {
 }
 
 func (s *misBiServer) Bi(ctx context.Context, biLog *p.BiLog) (*p.BiResult, error) {
-	log.Println("[grpc] server api Bi() called", biLog.ProjectName, biLog.ActionName, biLog.Timestamp, string(biLog.Detail))
+	writeLog(biLog)
 	if err := SaveBiLog(biLog); err != nil {
 		return &p.BiResult{false, err.Error()}, err
 	}
