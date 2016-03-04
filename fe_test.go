@@ -1,7 +1,7 @@
 package logging
 
 import (
-	"github.com/MISingularity/logging/be/internal"
+	"github.com/MISingularity/logging/be/testhelper"
 	"github.com/MISingularity/logging/fe"
 	"github.com/MISingularity/logging/p"
 	"log"
@@ -10,7 +10,7 @@ import (
 )
 
 func setup() {
-	fe.Init("127.0.0.1", "50051")
+	fe.Init("127.0.0.1:50051")
 }
 
 func teardown() {
@@ -38,6 +38,6 @@ func TestGrpcCliCall(t *testing.T) {
 		t.Error("fe.Bi() failed, err:", err)
 	}
 
-	internal.DeleteBiLog(pbBiLog)
+	testhelper.DeleteBiLog(pbBiLog)
 
 }

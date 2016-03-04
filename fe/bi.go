@@ -1,10 +1,11 @@
 package fe
 
 import (
+	"log"
+
 	"github.com/MISingularity/logging/p"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"log"
 )
 
 var (
@@ -13,8 +14,8 @@ var (
 
 // Init
 // init a grpc client connect to server
-func Init(host string, port string) error {
-	conn, err := grpc.Dial(host + ":" + port)
+func Init(addr string) error {
+	conn, err := grpc.Dial(addr)
 	if err != nil {
 		log.Fatal("fail to dial:", err)
 		return err
