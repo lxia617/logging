@@ -1,11 +1,12 @@
-package internal
+package testhelper
 
 import (
 	"bytes"
+	"log"
+
 	"github.com/MISingularity/logging/be"
 	"github.com/MISingularity/logging/p"
 	"gopkg.in/mgo.v2/bson"
-	"log"
 )
 
 func IsEqual(a, b *p.BiLog) bool {

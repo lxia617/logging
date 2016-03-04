@@ -1,7 +1,7 @@
 package logging
 
 import (
-	"github.com/MISingularity/logging/be/internal"
+	"github.com/MISingularity/logging/be/testhelper"
 	"github.com/MISingularity/logging/fe"
 	"github.com/MISingularity/logging/p"
 	"log"
@@ -38,6 +38,6 @@ func TestGrpcCliCall(t *testing.T) {
 		t.Error("fe.Bi() failed, err:", err)
 	}
 
-	internal.DeleteBiLog(pbBiLog)
+	testhelper.DeleteBiLog(pbBiLog)
 
 }
