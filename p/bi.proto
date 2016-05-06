@@ -8,6 +8,7 @@ option java_outer_classname = "BiProto";
 
 service MisBi {
     rpc Bi(BiLog) returns (BiResult) {}
+    rpc BiDeviceInfo(DeviceInfo) returns (BiResult) {}
 }
 
 message BiLog {
@@ -22,3 +23,35 @@ message BiResult {
     string msg = 2;
 }
 
+message PerformPathIssue {
+    string query_id = 1;
+    int32 can_perform_path_count = 2;
+}
+
+
+message DeviceInfo {
+    string device_id = 1;
+    string manufacturer = 2;
+    string model = 3;//uses to analyse what is the most popular manufacturer (for example Huawei) or model (for example, Next 6P)  user uses
+    string app_version = 4;
+    string ni_version = 5;
+    int64 open_app_time = 6;
+}
+
+message CommandResult {
+    string command_name = 1;
+    string query_id = 2;
+    bool use_search_result = 3;
+    bool user_choose_trigger = 4;//whether user thinks this is the right result
+    int64 date_time = 5;//uses to analyse how many times user trigger this app per day,what is the interval
+}
+
+message CommandExecutePerformance {
+    int64 speak_time = 1;
+    int64 receive_voice_result_time = 2;
+    int64 send_command_time =3;
+    int64 receive_result_time = 4;
+    string command_text = 5;
+    string query_id = 6;
+    string device_id = 7;
+}

@@ -45,3 +45,19 @@ func SaveBiLog(item *p.BiLog) error {
 
 	return nil
 }
+
+func SaveDeviceInfo(item *p.DeviceInfo) error {
+	if MgoSession == nil {
+		log.Println("MongoDB not connected, user log saved to file")
+		log.Printf("[UserLog] %#v\n", item)
+		return errors.New("Can not connect mongoDb")
+	}
+	db := MgoSession.DB(item.NiVersion)
+	collection := db.C("userlog")
+	if err := collection.Insert(item); err != nil {
+		log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
+		return err
+	}
+
+	return nil
+}

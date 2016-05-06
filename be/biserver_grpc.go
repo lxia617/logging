@@ -27,6 +27,14 @@ func (s *misBiServer) Bi(ctx context.Context, biLog *p.BiLog) (*p.BiResult, erro
 	return &p.BiResult{true, ""}, nil
 }
 
+func (s *misBiServer) BiDeviceInfo(ctx context.Context, deviceInfo *p.DeviceInfo) (*p.BiResult, error) {
+	writeDeviceInfo(deviceInfo)
+	if err := SaveDeviceInfo(deviceInfo); err != nil {
+		return &p.BiResult{false, err.Error()}, err
+	}
+	return &p.BiResult{true, ""}, nil
+}
+
 func InitGrpcServer(port string) {
 	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {

@@ -16,6 +16,11 @@ func writeLog(biLog *p.BiLog) {
 	logger.Println(biLog.ProjectName, biLog.ActionName, biLog.Timestamp, string(biLog.Detail))
 }
 
+func writeDeviceInfo(deviceInfo *p.DeviceInfo) {
+	logger := getLogger(deviceInfo.NiVersion)
+	logger.Println(deviceInfo.NiVersion, deviceInfo.Manufacturer, deviceInfo.Model, deviceInfo.AppVersion, deviceInfo.OpenAppTime)
+}
+
 func getLogger(projName string) *log.Logger {
 	if l := loggers[projName]; l != nil {
 		return l
