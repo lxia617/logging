@@ -15,7 +15,7 @@ var (
 // Init
 // init a grpc client connect to server
 func Init(addr string) error {
-	conn, err := grpc.Dial(addr)
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal("fail to dial:", err)
 		return err
@@ -32,6 +32,18 @@ func Bi(item *p.BiLog) error {
 	rslt, err := grpcClient.Bi(context.Background(), item)
 	if err != nil {
 		log.Println("error when calling Bi:", err)
+		return err
+	}
+	log.Printf("grpc call result:%#v", rslt)
+	return nil
+}
+
+// DeviceInfo
+// add a DeviceInfo log
+func DeviceInfo(item *p.DeviceInfo) error {
+	rslt, err := grpcClient.BiDeviceInfo(context.Background(), item)
+	if err != nil {
+		log.Println("error when calling Bi DeviceInfo:", err)
 		return err
 	}
 	log.Printf("grpc call result:%#v", rslt)

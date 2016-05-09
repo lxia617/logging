@@ -7,6 +7,8 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"time"
+	"encoding/json"
+	"strings"
 )
 
 const (
@@ -14,6 +16,18 @@ const (
 	MONGO_PASSWORD = ""
 	MONGO_DBNAME   = "userlog"
 )
+
+type GoBiLog struct {
+	ProjectName string
+	ActionName  string
+	Timestamp   int64
+	Detail string
+}
+
+type Action struct {
+	Command string `json:"command"`
+	Actions string `json:"actions"`
+}
 
 var MgoSession *mgo.Session
 
@@ -31,17 +45,48 @@ func InitDbConn(mongoHost, mongoPort string) error {
 }
 
 func SaveBiLog(item *p.BiLog) error {
+	log.Printf("[UserLog] %#v\n", item)
 	if MgoSession == nil {
 		log.Println("MongoDB not connected, user log saved to file")
 		log.Printf("[UserLog] %#v\n", item)
 		return errors.New("Can not connect mongoDb")
 	}
 	db := MgoSession.DB(item.ProjectName)
-	collection := db.C("userlog")
-	if err := collection.Insert(item); err != nil {
+	collection := db.C(item.ActionName)
+
+	if item.ActionName ==  "tracking_data"{
+		act := Action{}
+		detail := string(item.Detail[:])
+		detail = strings.Replace(detail,"'","\"",-1)
+		log.Println("[Act from]:")
+		log.Println(detail)
+		json.Unmarshal([]byte(detail), &act)
+		log.Println("[Act Result]:")
+		log.Println(act)
+		log.Println(act.Command)
+		log.Println("[Act.actions]" + act.Actions)
+
+		if err := collection.Insert(act); err != nil {
+			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
+			return err
+		}
+	}
+
+/*	goBiItem := &GoBiLog{
+		ProjectName:item.ProjectName,
+		ActionName:item.ActionName,
+		Timestamp:item.Timestamp,
+		Detail:string(item.Detail[:]),
+	}
+
+	log.Printf("[GoBiLog All] %#v\n", goBiItem.Detail)
+
+	log.Printf("[GoBiLog All] %#v\n", goBiItem)
+
+	if err := collection.Insert(goBiItem); err != nil {
 		log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 		return err
-	}
+	}*/
 
 	return nil
 }

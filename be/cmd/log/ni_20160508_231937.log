@@ -1,0 +1,40 @@
+[ni]2016/05/08 23:19:37 ni service_log 1462720777 service removed0
+[ni]2016/05/08 23:19:37 ni service_log 1462720777 service restarted0
+[ni]2016/05/08 23:19:37 ni ni_performance 1462720777 action no result0
+[ni]2016/05/08 23:19:37 ni ni_performance 1462720777 current query path perform success query title packageName0
+[ni]2016/05/08 23:19:37 ni tracking_data 1462720777 { 'command': 'commandName', 'actions': 'acts0'}
+[ni]2016/05/08 23:19:37 ni service_log 1462720777 service removed1
+[ni]2016/05/08 23:19:37 ni service_log 1462720777 service restarted1
+[ni]2016/05/08 23:19:37 ni ni_performance 1462720777 action no result1
+[ni]2016/05/08 23:19:37 ni ni_performance 1462720777 current query path perform success query title packageName1
+[ni]2016/05/08 23:19:37 ni tracking_data 1462720777 { 'command': 'commandName', 'actions': 'acts1'}
+[ni]2016/05/08 23:22:47 ni service_log 1462720967 service removed0
+[ni]2016/05/08 23:22:47 ni service_log 1462720967 service restarted0
+[ni]2016/05/08 23:22:47 ni ni_performance 1462720967 action no result0
+[ni]2016/05/08 23:22:47 ni ni_performance 1462720967 current query path perform success query title packageName0
+[ni]2016/05/08 23:22:47 ni tracking_data 1462720967 'command': 'commandName', 'actions': 'acts0
+[ni]2016/05/08 23:22:47 ni service_log 1462720967 service removed1
+[ni]2016/05/08 23:22:47 ni service_log 1462720967 service restarted1
+[ni]2016/05/08 23:22:47 ni ni_performance 1462720967 action no result1
+[ni]2016/05/08 23:22:47 ni ni_performance 1462720967 current query path perform success query title packageName1
+[ni]2016/05/08 23:22:47 ni tracking_data 1462720967 'command': 'commandName', 'actions': 'acts1
+[ni]2016/05/08 23:23:28 ni service_log 1462721008 service removed0
+[ni]2016/05/08 23:23:28 ni service_log 1462721008 service restarted0
+[ni]2016/05/08 23:23:28 ni ni_performance 1462721008 action no result0
+[ni]2016/05/08 23:23:28 ni ni_performance 1462721008 current query path perform success query title packageName0
+[ni]2016/05/08 23:23:28 ni tracking_data 1462721008 'command':'commandName', 'actions': 'acts0'
+[ni]2016/05/08 23:23:28 ni service_log 1462721008 service removed1
+[ni]2016/05/08 23:23:28 ni service_log 1462721008 service restarted1
+[ni]2016/05/08 23:23:28 ni ni_performance 1462721008 action no result1
+[ni]2016/05/08 23:23:28 ni ni_performance 1462721008 current query path perform success query title packageName1
+[ni]2016/05/08 23:23:28 ni tracking_data 1462721008 'command':'commandName', 'actions': 'acts1'
+[ni]2016/05/08 23:23:32 ni service_log 1462721012 service removed0
+[ni]2016/05/08 23:23:32 ni service_log 1462721012 service restarted0
+[ni]2016/05/08 23:23:32 ni ni_performance 1462721012 action no result0
+[ni]2016/05/08 23:23:32 ni ni_performance 1462721012 current query path perform success query title packageName0
+[ni]2016/05/08 23:23:32 ni tracking_data 1462721012 'command':'commandName', 'actions': 'acts0'
+[ni]2016/05/08 23:23:32 ni service_log 1462721012 service removed1
+[ni]2016/05/08 23:23:32 ni service_log 1462721012 service restarted1
+[ni]2016/05/08 23:23:32 ni ni_performance 1462721012 action no result1
+[ni]2016/05/08 23:23:32 ni ni_performance 1462721012 current query path perform success query title packageName1
+[ni]2016/05/08 23:23:32 ni tracking_data 1462721012 'command':'commandName', 'actions': 'acts1'

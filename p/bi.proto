@@ -3,7 +3,7 @@ syntax = "proto3";
 package p;
 
 option java_multiple_files = true;
-option java_package = "com.singularpoints.io.grpc";
+option java_package = "com.singulariti.io.grpc";
 option java_outer_classname = "BiProto";
 
 service MisBi {

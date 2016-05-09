@@ -6,9 +6,38 @@ import (
 	"os"
 
 	"github.com/MISingularity/logging/be"
+	"encoding/json"
+	"fmt"
 )
 
+type Response2 struct {
+	Page   int      `json:"page"`
+	Fruits []string `json:"fruits"`
+}
+
+func testResponse() {
+	str := `{"page": 1, "fruits": ["apple", "peach"]}`
+	res := Response2{}
+	json.Unmarshal([]byte(str), &res)
+	fmt.Println(res)
+	fmt.Println(res.Fruits[0])
+}
+
+type Action struct {
+	Command string `json:"command"`
+	Actions string `json:"actions"`
+}
+
+func testAct() {
+	str := `{"command":"commandName", "actions": "acts1"}`
+	res := Action{}
+	json.Unmarshal([]byte(str), &res)
+	fmt.Println(res)
+	fmt.Println(res.Command)
+}
+
 func main() {
+	testAct()
 	fs := flag.NewFlagSet("dslogging", flag.ExitOnError)
 	port := fs.String("port", "50051", "Listening port")
 	mh := fs.String("mongo-host", "127.0.0.1", "MongoDB host")

@@ -1,0 +1,10 @@
+[ni]2016/05/09 11:10:09 ni service_log 1462763409 service removed0
+[ni]2016/05/09 11:10:09 ni service_log 1462763409 service restarted0
+[ni]2016/05/09 11:10:09 ni ni_performance 1462763409 action no result0
+[ni]2016/05/09 11:10:09 ni ni_performance 1462763409 current query path perform success query title packageName0
+[ni]2016/05/09 11:10:09 ni tracking_data 1462763409 {'command':'commandName', 'actions': 'acts0'}
+[ni]2016/05/09 11:10:09 ni service_log 1462763409 service removed1
+[ni]2016/05/09 11:10:09 ni service_log 1462763409 service restarted1
+[ni]2016/05/09 11:10:09 ni ni_performance 1462763409 action no result1
+[ni]2016/05/09 11:10:09 ni ni_performance 1462763409 current query path perform success query title packageName1
+[ni]2016/05/09 11:10:09 ni tracking_data 1462763409 {'command':'commandName', 'actions': 'acts1'}
