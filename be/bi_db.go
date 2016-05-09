@@ -24,9 +24,34 @@ type GoBiLog struct {
 	Detail string
 }
 
-type Action struct {
-	Command string `json:"command"`
-	Actions string `json:"actions"`
+type ServiceStartInfo struct {
+	DeviceId string `json:"deviceId"`
+	NiVersion string `json:"niVersion"`
+	Model string `json:"model"`
+	Manufacture string `json:"manufacture"`
+}
+
+type ServiceRemoveInfo struct {
+	DeviceId string `json:"deviceId"`
+	NiVersion string `json:"niVersion"`
+}
+
+type SearchPerformanceInfo struct {
+	DeviceId string `json:"deviceId"`
+	NiVersion string `json:"niVersion"`
+	QueryTimestamp int64 `json:"queryTimestamp"`
+	PerformPathCount int32 `json:"performPathCount"`
+	ActionListCount int32 `json:"actionListCount"`
+}
+
+type NiPerformanceInfo struct {
+	DeviceId string `json:"deviceId"`
+	NiVersion string `json:"niVersion"`
+	QueryTimestamp int64 `json:"queryTimestamp"`
+	QueryVoiceTimestamp int64 `json:"queryVoiceTimestamp"`
+	ReceiveVoiceResultTimestamp int64 `json:"receiveVoiceResultTimestamp"`
+	SendQueryTimestamp int64 `json:"sendQueryTimestamp"`
+	ReceiveQueryResultTimestamp int64 `json:"receiveQueryResultTimestamp"`
 }
 
 var MgoSession *mgo.Session
@@ -54,19 +79,46 @@ func SaveBiLog(item *p.BiLog) error {
 	db := MgoSession.DB(item.ProjectName)
 	collection := db.C(item.ActionName)
 
-	if item.ActionName ==  "tracking_data"{
-		act := Action{}
-		detail := string(item.Detail[:])
-		detail = strings.Replace(detail,"'","\"",-1)
-		log.Println("[Act from]:")
-		log.Println(detail)
-		json.Unmarshal([]byte(detail), &act)
-		log.Println("[Act Result]:")
-		log.Println(act)
-		log.Println(act.Command)
-		log.Println("[Act.actions]" + act.Actions)
+	detail := string(item.Detail[:])
+	detail = strings.Replace(detail,"'","\"",-1)
 
-		if err := collection.Insert(act); err != nil {
+	if item.ActionName ==  "service_start_info"{
+		service_start_info := ServiceStartInfo{}
+		json.Unmarshal([]byte(detail), &service_start_info)
+		log.Println("[Result]:")
+		log.Println(service_start_info)
+
+		if err := collection.Insert(service_start_info); err != nil {
+			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
+			return err
+		}
+	}else if item.ActionName == "service_remove_info"{
+		service_remove_info := ServiceRemoveInfo{}
+		json.Unmarshal([]byte(detail), &service_remove_info)
+		log.Println("[Result]:")
+		log.Println(service_remove_info)
+
+		if err := collection.Insert(service_remove_info); err != nil {
+			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
+			return err
+		}
+	}else if item.ActionName == "search_performance_info"{
+		search_performance_info := SearchPerformanceInfo{}
+		json.Unmarshal([]byte(detail), &search_performance_info)
+		log.Println("[Result]:")
+		log.Println(search_performance_info)
+
+		if err := collection.Insert(search_performance_info); err != nil {
+			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
+			return err
+		}
+	}else if item.ActionName == "ni_performance_info"{
+		ni_performance_info := NiPerformanceInfo{}
+		json.Unmarshal([]byte(detail), &ni_performance_info)
+		log.Println("[Result]:")
+		log.Println(ni_performance_info)
+
+		if err := collection.Insert(ni_performance_info); err != nil {
 			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 			return err
 		}
@@ -87,22 +139,6 @@ func SaveBiLog(item *p.BiLog) error {
 		log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 		return err
 	}*/
-
-	return nil
-}
-
-func SaveDeviceInfo(item *p.DeviceInfo) error {
-	if MgoSession == nil {
-		log.Println("MongoDB not connected, user log saved to file")
-		log.Printf("[UserLog] %#v\n", item)
-		return errors.New("Can not connect mongoDb")
-	}
-	db := MgoSession.DB(item.NiVersion)
-	collection := db.C("userlog")
-	if err := collection.Insert(item); err != nil {
-		log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
-		return err
-	}
 
 	return nil
 }
