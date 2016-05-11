@@ -20,7 +20,7 @@ func main() {
 	log.Println("init bi client")
 
 	fs := flag.NewFlagSet("logging_test", flag.ContinueOnError)
-	serverAddr := fs.String("server-addr", "127.0.0.1:50052", "Specify the server url to connect to")
+	serverAddr := fs.String("server-addr", "42.159.133.35:50051", "Specify the server url to connect to")
 	runs := fs.Int("runs", 1, "How many loops")
 	interval := fs.Int("interval", 1, "Interval between two grpc call(in Seconds)")
 	if err := fs.Parse(os.Args[1:]); err != nil {

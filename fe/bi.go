@@ -15,7 +15,7 @@ var (
 // Init
 // init a grpc client connect to server
 func Init(addr string) error {
-	conn, err := grpc.Dial(addr)
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal("fail to dial:", err)
 		return err
