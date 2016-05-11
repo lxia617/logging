@@ -95,9 +95,34 @@ var unMarshalTextTests = []UnmarshalTextTest{
 		},
 	},
 
-	// Quoted string concatenation
+	// Quoted string concatenation with double quotes
 	{
 		in: `count:42 name: "My name is "` + "\n" + `"elsewhere"`,
+		out: &MyMessage{
+			Count: Int32(42),
+			Name:  String("My name is elsewhere"),
+		},
+	},
+
+	// Quoted string concatenation with single quotes
+	{
+		in: "count:42 name: 'My name is '\n'elsewhere'",
+		out: &MyMessage{
+			Count: Int32(42),
+			Name:  String("My name is elsewhere"),
+		},
+	},
+
+	// Quoted string concatenations with mixed quotes
+	{
+		in: "count:42 name: 'My name is '\n\"elsewhere\"",
+		out: &MyMessage{
+			Count: Int32(42),
+			Name:  String("My name is elsewhere"),
+		},
+	},
+	{
+		in: "count:42 name: \"My name is \"\n'elsewhere'",
 		out: &MyMessage{
 			Count: Int32(42),
 			Name:  String("My name is elsewhere"),
@@ -152,7 +177,7 @@ var unMarshalTextTests = []UnmarshalTextTest{
 	// Bad quoted string
 	{
 		in:  `inner: < host: "\0" >` + "\n",
-		err: `line 1.15: invalid quoted string "\0"`,
+		err: `line 1.15: invalid quoted string "\0": \0 requires 2 following digits`,
 	},
 
 	// Number too large for int64
@@ -256,6 +281,15 @@ var unMarshalTextTests = []UnmarshalTextTest{
 		},
 	},
 
+	// Repeated field with list notation
+	{
+		in: `count:42 pet: ["horsey", "bunny"]`,
+		out: &MyMessage{
+			Count: Int32(42),
+			Pet:   []string{"horsey", "bunny"},
+		},
+	},
+
 	// Repeated message with/without colon and <>/{}
 	{
 		in: `count:42 others:{} others{} others:<> others:{}`,
@@ -299,6 +333,16 @@ var unMarshalTextTests = []UnmarshalTextTest{
 		err: `proto: required field "testdata.MyMessage.count" not set`,
 		out: &MyMessage{
 			Name: String("Pawel"),
+		},
+	},
+
+	// Missing required field in a required submessage
+	{
+		in:  `count: 42 we_must_go_deeper < leo_finally_won_an_oscar <> >`,
+		err: `proto: required field "testdata.InnerMessage.host" not set`,
+		out: &MyMessage{
+			Count:          Int32(42),
+			WeMustGoDeeper: &RequiredInnerMessage{LeoFinallyWonAnOscar: &InnerMessage{}},
 		},
 	},
 
@@ -462,7 +506,7 @@ func TestProto3TextParsing(t *testing.T) {
 func TestMapParsing(t *testing.T) {
 	m := new(MessageWithMap)
 	const in = `name_mapping:<key:1234 value:"Feist"> name_mapping:<key:1 value:"Beatles">` +
-		`msg_mapping:<key:-4 value:<f: 2.0>>` +
+		`msg_mapping:<key:-4, value:<f: 2.0>,>` + // separating commas are okay
 		`msg_mapping<key:-2 value<f: 4.0>>` + // no colon after "value"
 		`byte_mapping:<key:true value:"so be it">`
 	want := &MessageWithMap{
@@ -478,6 +522,18 @@ func TestMapParsing(t *testing.T) {
 			true: []byte("so be it"),
 		},
 	}
+	if err := UnmarshalText(in, m); err != nil {
+		t.Fatal(err)
+	}
+	if !Equal(m, want) {
+		t.Errorf("\n got %v\nwant %v", m, want)
+	}
+}
+
+func TestOneofParsing(t *testing.T) {
+	const in = `name:"Shrek"`
+	m := new(Communique)
+	want := &Communique{Union: &Communique_Name{"Shrek"}}
 	if err := UnmarshalText(in, m); err != nil {
 		t.Fatal(err)
 	}
