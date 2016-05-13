@@ -11,12 +11,12 @@ WORKDIR /go/src/github.com/MISingularity/logging
 #RUN go get google.golang.org/grpc
 #RUN go get gopkg.in/mgo.v2
 RUN go get github.com/tools/godep
-RUN godep go build -o mislogd /go/src/github.com/MISingularity/logging/be/cmd/main.go
+RUN godep go build -o mislogserver /go/src/github.com/MISingularity/logging/fe_show_data/server.go
 
 ENV MONGO_SERVICE_HOST 10.204.216.85
 ENV MONGO_SERVICE_PORT 27017
 
 VOLUME /go/src/github.com/MISingularity/logging/log
 
-CMD /go/src/github.com/MISingularity/logging/mislogd -mongo-host $MONGO_SERVICE_HOST -mongo-port $MONGO_SERVICE_PORT
-EXPOSE 50051
+CMD /go/src/github.com/MISingularity/logging/mislogserver
+EXPOSE 8080

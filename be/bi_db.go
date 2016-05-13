@@ -65,6 +65,9 @@ type NiPerformanceInfo struct {
 	ReceiveQueryResultTimestamp int64 `json:"receiveQueryResultTimestamp"`
 }
 
+type Action struct {
+
+}
 var MgoSession *mgo.Session
 
 func InitDbConn(mongoHost, mongoPort string) error {
