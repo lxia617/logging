@@ -123,6 +123,18 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 
 		err = allData.Skip(pageSize*(pageId-1)).Limit(pageSize).All(&actionPerformResults)
 
+		//err := collection.Find(nil).All(&results)
+		for i := 1 ; err != nil && i < 5 ; i++ {
+			log.Printf("Action Perform Result : ERROR : %s\n", err)
+			log.Println("Try to connect times:%d", i)
+
+			if errConnect := be.InitDbConn(mongoHost,mongoPort); errConnect != nil {
+				log.Fatal(errConnect)
+			}
+
+			err = collection.Find(query).Sort("-querytimestamp").Skip(pageSize*(pageId-1)).Limit(pageSize).All(&actionPerformResults)
+		}
+
 		for index, actionPerformResult := range actionPerformResults {
 			queryTime := time.Unix(actionPerformResult.QueryTimestamp/1000, actionPerformResult.QueryTimestamp%1000)
 			result += "Record Index:" + strconv.Itoa(index + 1 + pageSize*(pageId-1)) + "\n"
@@ -136,9 +148,7 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 
 		pageIndex := 1
 		for pageIndex <= count/pageSize + 1 {
-			linkpage += "<a href='/collection/action_perform_result?pageid=" + strconv.Itoa(pageIndex)
-			+ "&pagesize=" + strconv.Itoa(pageSize) +
-			+ "&success=" + success +"'>" + strconv.Itoa(pageIndex) + "</a>   "
+			linkpage += "<a href='/collection/action_perform_result?pageid=" + strconv.Itoa(pageIndex) + "&pagesize=" + strconv.Itoa(pageSize) + "&success=" + success +"'>" + strconv.Itoa(pageIndex) + "</a>   "
 			pageIndex = pageIndex + 1
 		}
 
