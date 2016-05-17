@@ -1,23 +1,26 @@
 package main
+
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
-	"github.com/MISingularity/logging/be"
-	"log"
 	"encoding/json"
-	"time"
+	"log"
+	"net/http"
 	"strconv"
-	"gopkg.in/mgo.v2/bson"
 	"strings"
+	"time"
+
+	"github.com/MISingularity/logging/be"
+	"github.com/gin-gonic/gin"
+	"gopkg.in/mgo.v2/bson"
 )
+
 const (
-	mongoHost = "42.159.133.35"
-	mongoPort = "27017"
+	mongoHost    = "42.159.133.35"
+	mongoPort    = "27017"
 	MONGO_DBNAME = "XIAOZHI_LOG"
 )
 
 func main() {
-	if err := be.InitDbConn(mongoHost,mongoPort); err != nil {
+	if err := be.InitDbConn(mongoHost, mongoPort); err != nil {
 		log.Fatal(err)
 	}
 
@@ -34,12 +37,12 @@ func main() {
 		pageid, _ := strconv.Atoi(c.DefaultQuery("pageid", "1"))
 		pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
 
-		if(pageId == 1){
+		if pageId == 1 {
 			pageId = pageid
 		}
 
 		success := c.DefaultQuery("success", "false")
-		showCollectionData(c, name, pageId , success, pageSize)
+		showCollectionData(c, name, pageId, success, pageSize)
 		//c.String(http.StatusOK, showCollectionData(name),"\n")
 	})
 	router.POST("/submit", func(c *gin.Context) {
@@ -52,23 +55,23 @@ func main() {
 	router.Run(":8080")
 }
 
-func showAllCollections(c *gin.Context){
+func showAllCollections(c *gin.Context) {
 	log.Print("get / request, showAllCollections")
 	log.Print(time.Now())
 
 	names, err := be.MgoSession.DB(MONGO_DBNAME).CollectionNames()
 
 	if err != nil {
-		log.Println("[ERROR]Can not connect Database " + MONGO_DBNAME +", err:", err)
+		log.Println("[ERROR]Can not connect Database "+MONGO_DBNAME+", err:", err)
 
 		c.String(http.StatusGatewayTimeout, err.Error())
 
-		if errConnect := be.InitDbConn(mongoHost,mongoPort); errConnect != nil {
+		if errConnect := be.InitDbConn(mongoHost, mongoPort); errConnect != nil {
 			log.Fatal(errConnect)
 			c.String(http.StatusGatewayTimeout, "try to connect again fail")
 			c.String(http.StatusGatewayTimeout, err.Error())
 			return
-		}else{
+		} else {
 			c.String(http.StatusRequestTimeout, "Please try again")
 		}
 	}
@@ -80,11 +83,11 @@ func showAllCollections(c *gin.Context){
 
 	for i, name := range names {
 		//links[i] = "<a href='http://localhost:8080/collection/" + name +"'>" + name +"</a><br/>";
-		links[i] = "<a href='/collection/" + name +"'>" + name +"</a><br/>";
+		links[i] = "<a href='/collection/" + name + "'>" + name + "</a><br/>"
 	}
 
 	//c.String(http.StatusOK, strings.Join(links,"\n"))
-	c.Writer.Write([]byte(strings.Join(links,"\n")))
+	c.Writer.Write([]byte(strings.Join(links, "\n")))
 
 }
 
@@ -94,7 +97,7 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 
 	collection := be.MgoSession.DB(MONGO_DBNAME).C(name)
 
-	if collection == nil{
+	if collection == nil {
 		log.Printf("Collection nil, maybe error")
 		c.String(http.StatusGatewayTimeout, "Collection nil, please try <host:port>/ to see whether this Collection is in the DB")
 		return
@@ -103,7 +106,7 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 	var err error
 	var result string
 
-	if name ==  "service_start_info"{
+	if name == "service_start_info" {
 		var serviceStartInfos []be.ServiceStartInfo
 		err = collection.Find(nil).All(&serviceStartInfos)
 
@@ -111,9 +114,9 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 			b, _ := json.MarshalIndent(serviceStartInfo, "\t", "")
 			result += string(b) + "\n"
 		}
-	}else if name == "action_perform_result"{
+	} else if name == "action_perform_result" {
 
-		query := bson.M{"success":strings.Compare(success,"true") == 0}
+		query := bson.M{"success": strings.Compare(success, "true") == 0}
 		log.Println(query)
 
 		var actionPerformResults []be.ActionPerformResult
@@ -121,23 +124,23 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 		allData := collection.Find(query).Sort("-querytimestamp")
 		count, _ := allData.Count()
 
-		err = allData.Skip(pageSize*(pageId-1)).Limit(pageSize).All(&actionPerformResults)
+		err = allData.Skip(pageSize * (pageId - 1)).Limit(pageSize).All(&actionPerformResults)
 
 		//err := collection.Find(nil).All(&results)
-		for i := 1 ; err != nil && i < 5 ; i++ {
+		for i := 1; err != nil && i < 5; i++ {
 			log.Printf("Action Perform Result : ERROR : %s\n", err)
 			log.Println("Try to connect times:%d", i)
 
-			if errConnect := be.InitDbConn(mongoHost,mongoPort); errConnect != nil {
+			if errConnect := be.InitDbConn(mongoHost, mongoPort); errConnect != nil {
 				log.Fatal(errConnect)
 			}
 
-			err = collection.Find(query).Sort("-querytimestamp").Skip(pageSize*(pageId-1)).Limit(pageSize).All(&actionPerformResults)
+			err = collection.Find(query).Sort("-querytimestamp").Skip(pageSize * (pageId - 1)).Limit(pageSize).All(&actionPerformResults)
 		}
 
 		for index, actionPerformResult := range actionPerformResults {
 			queryTime := time.Unix(actionPerformResult.QueryTimestamp/1000, actionPerformResult.QueryTimestamp%1000)
-			result += "Record Index:" + strconv.Itoa(index + 1 + pageSize*(pageId-1)) + "\n"
+			result += "Record Index:" + strconv.Itoa(index+1+pageSize*(pageId-1)) + "\n"
 			result += queryTime.String() + "\n"
 			//result += strconv.FormatInt(actionPerformResult.QueryTimestamp, 10) + "\n"
 			b, _ := json.MarshalIndent(actionPerformResult, "", "")
@@ -147,20 +150,28 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 		var linkpage string
 
 		pageIndex := 1
-		for pageIndex <= count/pageSize + 1 {
-			linkpage += "<a href='/collection/action_perform_result?pageid=" + strconv.Itoa(pageIndex) + "&pagesize=" + strconv.Itoa(pageSize) + "&success=" + success +"'>" + strconv.Itoa(pageIndex) + "</a>   "
+		for pageIndex <= count/pageSize+1 {
+			linkpage += "<a href='/collection/action_perform_result?pageid=" + strconv.Itoa(pageIndex) + "&pagesize=" + strconv.Itoa(pageSize) + "&success=" + success + "'>" + strconv.Itoa(pageIndex) + "</a>   "
 			pageIndex = pageIndex + 1
 		}
 
 		c.Writer.Write([]byte(linkpage + "<br/><br/>"))
 
+	} else {
+		var BiLogStrInfos []be.BiLogStr
+		err = collection.Find(nil).All(&BiLogStrInfos)
+
+		for _, logStr := range BiLogStrInfos {
+			b, _ := json.MarshalIndent(logStr, "\t", "")
+			result += string(b) + "\n"
+		}
 	}
 
 	//err := collection.Find(nil).All(&results)
 	if err != nil {
 		log.Printf("RunQuery showCollectionData : ERROR : %s\n, please try again", err)
 
-		if errConnect := be.InitDbConn(mongoHost,mongoPort); errConnect != nil {
+		if errConnect := be.InitDbConn(mongoHost, mongoPort); errConnect != nil {
 			log.Fatal(errConnect)
 		}
 		c.String(http.StatusGatewayTimeout, err.Error())
@@ -169,4 +180,3 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 	log.Print(result)
 	c.String(http.StatusOK, strings.Replace(result, "\n", "<br/>", -1))
 }
-
