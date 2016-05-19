@@ -156,12 +156,7 @@ func SaveBiLog(item *p.BiLog) error {
 			return err
 		}
 	} else {
-		newItemStr := &BiLogStr{
-			ProjectName: item.ProjectName,
-			ActionName:  item.ActionName,
-			Timestamp:   item.Timestamp,
-			Detail:      string(item.Detail[:])}
-		if err := collection.Insert(newItemStr); err != nil {
+		if err := collection.Insert(item); err != nil {
 			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 			return err
 		}

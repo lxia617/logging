@@ -155,15 +155,14 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 			pageIndex = pageIndex + 1
 		}
 
-		c.Writer.Write([]byte(linkpage + "<br/><br/>"))
-
+		result = strings.Replace(result, "\n", "<br/>", -1)
 	} else {
 		var BiLogStrInfos []be.BiLogStr
 		err = collection.Find(nil).All(&BiLogStrInfos)
 
 		for _, logStr := range BiLogStrInfos {
-			b, _ := json.MarshalIndent(logStr, "\t", "")
-			result += string(b) + "\n"
+			b, _ := json.MarshalIndent(logStr, "", "")
+			result += string(b) + "<br/><br/>"
 		}
 	}
 
@@ -178,5 +177,5 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 	}
 
 	log.Print(result)
-	c.String(http.StatusOK, strings.Replace(result, "\n", "<br/>", -1))
+	c.String(http.StatusOK, result)
 }
