@@ -20,7 +20,7 @@ func GetLogger(projName string) *log.Logger {
 	if l := loggers[projName]; l != nil {
 		return l
 	}
-	logfile, err := os.OpenFile("log/"+projName+"_"+time.Now().Format("20060102_150405.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logfile, err := os.OpenFile("log/" + projName + "_" + time.Now().Format("20060102_150405.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Println("Failed to open file: ", err)
 		return log.New(os.Stdout, "["+projName+"]", log.LstdFlags)

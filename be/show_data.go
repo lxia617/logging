@@ -1,4 +1,4 @@
-package main
+package be
 
 import (
 	"encoding/json"
@@ -7,26 +7,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/MISingularity/logging/be"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2/bson"
 )
 
-const (
-	// mongoHost = "127.0.0.1"
-	mongoHost    = "42.159.133.35"
-	mongoPort    = "27017"
-	MONGO_DBNAME = "XIAOZHI_LOG"
-)
-
-func main() {
-	if err := be.InitDbConn(mongoHost, mongoPort); err != nil {
-		log.Fatal(err)
-	}
-
-	be.SetLogFile()
-
+func ShowDataInBrowser() {
 	router := gin.Default()
 	router.GET("/", func(c *gin.Context) {
 		//c.String(http.StatusOK, strings.Join(showAllCollections(),"\n"))
@@ -57,24 +42,16 @@ func main() {
 }
 
 func showAllCollections(c *gin.Context) {
+	RetryConnect()
 	log.Print("get / request, showAllCollections")
 	log.Print(time.Now())
 
-	names, err := be.MgoSession.DB(MONGO_DBNAME).CollectionNames()
+	names, err := MgoSession.DB(MONGO_DBNAME).CollectionNames()
 
 	if err != nil {
 		log.Println("[ERROR]Can not connect Database "+MONGO_DBNAME+", err:", err)
 
 		c.String(http.StatusGatewayTimeout, err.Error())
-
-		if errConnect := be.InitDbConn(mongoHost, mongoPort); errConnect != nil {
-			log.Fatal(errConnect)
-			c.String(http.StatusGatewayTimeout, "try to connect again fail")
-			c.String(http.StatusGatewayTimeout, err.Error())
-			return
-		} else {
-			c.String(http.StatusRequestTimeout, "Please try again")
-		}
 	}
 
 	// if use something like this, will not show link, just show raw data
@@ -93,10 +70,11 @@ func showAllCollections(c *gin.Context) {
 }
 
 func showCollectionData(c *gin.Context, name string, pageId int, success string, pageSize int) {
+	RetryConnect()
 	log.Print("get showCollectionData request:" + name + ", pageId:" + strconv.Itoa(pageId) + ", success: " + success)
 	log.Print(time.Now())
 
-	collection := be.MgoSession.DB(MONGO_DBNAME).C(name)
+	collection := MgoSession.DB(MONGO_DBNAME).C(name)
 
 	if collection == nil {
 		log.Printf("Collection nil, maybe error")
@@ -108,7 +86,7 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 	var result string
 
 	if name == "service_start_info" {
-		var serviceStartInfos []be.ServiceStartInfo
+		var serviceStartInfos []ServiceStartInfo
 		err = collection.Find(nil).All(&serviceStartInfos)
 
 		for _, serviceStartInfo := range serviceStartInfos {
@@ -120,24 +98,12 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 		query := bson.M{"success": strings.Compare(success, "true") == 0}
 		log.Println(query)
 
-		var actionPerformResults []be.ActionPerformResult
+		var actionPerformResults []ActionPerformResult
 		//err = collection.Find(bson.M{"success":false}).Sort("-querytimestamp").All(&actionPerformResults)
 		allData := collection.Find(query).Sort("-querytimestamp")
 		count, _ := allData.Count()
 
 		err = allData.Skip(pageSize * (pageId - 1)).Limit(pageSize).All(&actionPerformResults)
-
-		//err := collection.Find(nil).All(&results)
-		for i := 1; err != nil && i < 5; i++ {
-			log.Printf("Action Perform Result : ERROR : %s\n", err)
-			log.Println("Try to connect times:%d", i)
-
-			if errConnect := be.InitDbConn(mongoHost, mongoPort); errConnect != nil {
-				log.Fatal(errConnect)
-			}
-
-			err = collection.Find(query).Sort("-querytimestamp").Skip(pageSize * (pageId - 1)).Limit(pageSize).All(&actionPerformResults)
-		}
 
 		for index, actionPerformResult := range actionPerformResults {
 			queryTime := time.Unix(actionPerformResult.QueryTimestamp/1000, actionPerformResult.QueryTimestamp%1000)
@@ -159,7 +125,7 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 		c.Writer.Write([]byte(linkpage + "<br/><br/>"))
 		result = strings.Replace(result, "\n", "<br/>", -1)
 	} else {
-		var BiLogStrInfos []be.BiLogStr
+		var BiLogStrInfos []BiLogStr
 
 		if err = collection.Find(nil).Sort("-timestamp").All(&BiLogStrInfos); err == nil {
 			for _, logStr := range BiLogStrInfos {
@@ -172,10 +138,6 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 	//err := collection.Find(nil).All(&results)
 	if err != nil {
 		log.Printf("RunQuery showCollectionData : ERROR : %s\n, please try again", err)
-
-		if errConnect := be.InitDbConn(mongoHost, mongoPort); errConnect != nil {
-			log.Fatal(errConnect)
-		}
 		c.String(http.StatusGatewayTimeout, err.Error())
 	}
 

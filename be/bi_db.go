@@ -15,7 +15,7 @@ import (
 const (
 	MONGO_USER     = ""
 	MONGO_PASSWORD = ""
-	MONGO_DBNAME   = "userlog"
+	MONGO_DBNAME = "XIAOZHI_LOG"
 )
 
 type BiLogStr struct {
@@ -71,7 +71,25 @@ type Action struct {
 
 var MgoSession *mgo.Session
 
-func InitDbConn(mongoHost, mongoPort string) error {
+var mongoHost string
+var mongoPort string
+
+func InitDbConn(_mongoHost, _mongoPort string) error {
+	mongoHost = _mongoHost
+	mongoPort = _mongoPort
+	url := fmt.Sprintf("mongodb://%s:%s/%s", mongoHost, mongoPort, MONGO_DBNAME)
+	log.Println("Try to connect to MongoDB, url: ", url, "...")
+	session, err := mgo.DialWithTimeout(url, time.Duration(10)*time.Second)
+	if err != nil {
+		log.Println("[ERROR]Can not connect MongoDB, err:", err)
+		return errors.New("Can not connect mongodb")
+	}
+	MgoSession = session
+	log.Println("Init mongo session succeed")
+	return nil
+}
+
+func RetryConnect() error{
 	url := fmt.Sprintf("mongodb://%s:%s/%s", mongoHost, mongoPort, MONGO_DBNAME)
 	log.Println("Try to connect to MongoDB, url: ", url, "...")
 	session, err := mgo.DialWithTimeout(url, time.Duration(10)*time.Second)
@@ -85,6 +103,7 @@ func InitDbConn(mongoHost, mongoPort string) error {
 }
 
 func SaveBiLog(item *p.BiLog) error {
+	RetryConnect()
 	if MgoSession == nil {
 		log.Println("MongoDB not connected, user log saved to file")
 		log.Printf("[UserLog] %#v\n", item)

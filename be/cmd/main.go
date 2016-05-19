@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 	"os"
-
 	"github.com/MISingularity/logging/be"
 )
 
@@ -25,5 +24,8 @@ func main() {
 	if err := be.InitDbConn(*mh, *mp); err != nil {
 		log.Fatal(err)
 	}
+
+	go be.ShowDataInBrowser()
+
 	be.InitGrpcServer(*port)
 }
