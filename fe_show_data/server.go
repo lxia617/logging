@@ -14,6 +14,7 @@ import (
 )
 
 const (
+	// mongoHost = "127.0.0.1"
 	mongoHost    = "42.159.133.35"
 	mongoPort    = "27017"
 	MONGO_DBNAME = "XIAOZHI_LOG"
@@ -159,11 +160,12 @@ func showCollectionData(c *gin.Context, name string, pageId int, success string,
 		result = strings.Replace(result, "\n", "<br/>", -1)
 	} else {
 		var BiLogStrInfos []be.BiLogStr
-		err = collection.Find(nil).All(&BiLogStrInfos)
 
-		for _, logStr := range BiLogStrInfos {
-			b, _ := json.MarshalIndent(logStr, "", "")
-			result += string(b) + "<br/><br/>"
+		if err = collection.Find(nil).Sort("-timestamp").All(&BiLogStrInfos); err == nil {
+			for _, logStr := range BiLogStrInfos {
+				result += logStr.Detail + "\n"
+				break
+			}
 		}
 	}
 
