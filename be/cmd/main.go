@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/MISingularity/logging/be"
-	"time"
 )
 
 func main() {
