@@ -155,7 +155,7 @@ func SaveBiLog(item *p.BiLog) error {
 			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 			return err
 		}
-	} else {
+	} else if item.ActionName == "tracking_msg" {
 		if err := collection.Insert(item); err != nil {
 			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 			return err
