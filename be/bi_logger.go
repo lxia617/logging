@@ -31,7 +31,7 @@ func GetLogger(projName string) *log.Logger {
 }
 
 func SetLogFile() {
-	f, err :=  os.OpenFile("log/" + "go_" + time.Now().Format("20060102_15.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err :=  os.OpenFile("log/" + "be_main_" + time.Now().Format("20060102_15.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
