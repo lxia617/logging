@@ -42,11 +42,12 @@ func ShowDataInBrowser() {
 }
 
 func showAllCollections(c *gin.Context) {
-	RetryConnect()
+	sessionCopy := MgoSession.Copy()
+	defer sessionCopy.Close()
 	log.Print("get / request, showAllCollections")
 	log.Print(time.Now())
 
-	names, err := MgoSession.DB(MONGO_DBNAME).CollectionNames()
+	names, err := sessionCopy.DB(MONGO_DBNAME).CollectionNames()
 
 	if err != nil {
 		log.Println("[ERROR]Can not connect Database "+MONGO_DBNAME+", err:", err)
@@ -70,11 +71,12 @@ func showAllCollections(c *gin.Context) {
 }
 
 func showCollectionData(c *gin.Context, name string, pageId int, success string, pageSize int) {
-	RetryConnect()
+	sessionCopy := MgoSession.Copy()
+	defer sessionCopy.Close()
 	log.Print("get showCollectionData request:" + name + ", pageId:" + strconv.Itoa(pageId) + ", success: " + success)
 	log.Print(time.Now())
 
-	collection := MgoSession.DB(MONGO_DBNAME).C(name)
+	collection := sessionCopy.DB(MONGO_DBNAME).C(name)
 
 	if collection == nil {
 		log.Printf("Collection nil, maybe error")

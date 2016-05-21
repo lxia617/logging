@@ -89,27 +89,16 @@ func InitDbConn(_mongoHost, _mongoPort string) error {
 	return nil
 }
 
-func RetryConnect() error{
-	url := fmt.Sprintf("mongodb://%s:%s/%s", mongoHost, mongoPort, MONGO_DBNAME)
-	log.Println("Try to connect to MongoDB, url: ", url, "...")
-	session, err := mgo.DialWithTimeout(url, time.Duration(10)*time.Second)
-	if err != nil {
-		log.Println("[ERROR]Can not connect MongoDB, err:", err)
-		return errors.New("Can not connect mongodb")
-	}
-	MgoSession = session
-	log.Println("Init mongo session succeed")
-	return nil
-}
-
 func SaveBiLog(item *p.BiLog) error {
-	RetryConnect()
+	sessionCopy := MgoSession.Copy()
+	defer sessionCopy.Close()
 	if MgoSession == nil {
 		log.Println("MongoDB not connected, user log saved to file")
 		log.Printf("[UserLog] %#v\n", item)
+		panic(MgoSession)
 		return errors.New("Can not connect mongoDb")
 	}
-	db := MgoSession.DB(item.ProjectName)
+	db := sessionCopy.DB(item.ProjectName)
 	collection := db.C(item.ActionName)
 
 	detail := string(item.Detail[:])
