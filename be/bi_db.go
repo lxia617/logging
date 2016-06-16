@@ -111,12 +111,10 @@ func SaveBiLog(item *p.BiLog) error {
 		Detail:      detail,
 	}
 
-	log.Printf("[UserLog] %#v\n", itemStr)
-
 	if item.ActionName == "service_start_info" {
 		service_start_info := ServiceStartInfo{}
 		json.Unmarshal([]byte(detail), &service_start_info)
-		log.Println("[Result]:")
+		log.Println("[service_start_info parse result]:")
 		log.Println(service_start_info)
 
 		if err := collection.Insert(service_start_info); err != nil {
@@ -126,7 +124,7 @@ func SaveBiLog(item *p.BiLog) error {
 	} else if item.ActionName == "service_remove_info" {
 		service_remove_info := ServiceRemoveInfo{}
 		json.Unmarshal([]byte(detail), &service_remove_info)
-		log.Println("[Result]:")
+		log.Println("[service_remove_info parse result]:")
 		log.Println(service_remove_info)
 
 		if err := collection.Insert(service_remove_info); err != nil {
@@ -136,7 +134,7 @@ func SaveBiLog(item *p.BiLog) error {
 	} else if item.ActionName == "no_search_result" {
 		no_search_result := NoSearchResultInfo{}
 		json.Unmarshal([]byte(detail), &no_search_result)
-		log.Println("[Result]:")
+		log.Println("[no_search_result parse result]:")
 		log.Println(no_search_result)
 
 		if err := collection.Insert(no_search_result); err != nil {
@@ -146,7 +144,7 @@ func SaveBiLog(item *p.BiLog) error {
 	} else if item.ActionName == "action_perform_result" {
 		search_performance_info := ActionPerformResult{}
 		json.Unmarshal([]byte(detail), &search_performance_info)
-		log.Println("[Result]:")
+		log.Println("[action_perform_result parse result]:")
 		log.Println(search_performance_info)
 
 		if err := collection.Insert(search_performance_info); err != nil {
@@ -156,14 +154,16 @@ func SaveBiLog(item *p.BiLog) error {
 	} else if item.ActionName == "ni_performance_info" {
 		ni_performance_info := NiPerformanceInfo{}
 		json.Unmarshal([]byte(detail), &ni_performance_info)
-		log.Println("[Result]:")
+		log.Println("[ni_performance_info parse result:]:")
 		log.Println(ni_performance_info)
 
 		if err := collection.Insert(ni_performance_info); err != nil {
 			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 			return err
 		}
-	} else if item.ActionName == "tracking_msg" {
+	} else  {
+
+		log.Printf("[Other ActionName log:] %#v\n", itemStr)
 		if err := collection.Insert(item); err != nil {
 			log.Println("[ERROR]Save user log to MongoDB failed, err:", err)
 			return err

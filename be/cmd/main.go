@@ -25,7 +25,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	go be.ShowDataInBrowser()
-
 	be.InitGrpcServer(*port)
 }
