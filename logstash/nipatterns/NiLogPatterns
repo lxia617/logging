@@ -1,0 +1,18 @@
+NAME [a-zA-Z0-9._-]+
+
+#DateTime from grok-patterns
+YEAR (?>\d\d){1,2}
+HOUR (?:2[0123]|[01]?[0-9])
+MINUTE (?:[0-5][0-9])
+# '60' is a leap second in most time standards and thus is valid.
+SECOND (?:(?:[0-5]?[0-9]|60)(?:[:.,][0-9]+)?)
+TIME (?!<[0-9])%{HOUR}:%{MINUTE}(?::%{SECOND})(?![0-9])
+MONTHDAY (?:(?:0[1-9])|(?:[12][0-9])|(?:3[01])|[1-9])
+MONTHNUM (?:0?[1-9]|1[0-2])
+
+NUMBER (?:%{BASE10NUM})
+NOTSPACE \S+
+
+NIDATE %{YEAR}/%{MONTHNUM}/%{MONTHDAY} %{TIME}
+
+LOG_ONE_LINE \[%{NAME:ProjectName}\]%{NIDATE:logdate} %{NAME:ProjectName2} %{NAME:ActionName} %{NUMBER:originTimeStamp:int} %{NOTSPACE:detail}
